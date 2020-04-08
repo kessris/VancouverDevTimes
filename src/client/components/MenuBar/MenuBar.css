@@ -1,0 +1,55 @@
+.container {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 12px;
+    height: 18px;
+    max-width: 100%;
+    background-color: black;
+    border: 1px solid black;
+    color: white;
+    line-height: 18px;
+    text-align: center;
+    padding: 10px;
+}
+
+.button {
+    font-size: 12px;
+}
+
+@media screen and (max-width: 1469px) {
+    .button {
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 1370px) {
+    .button {
+        font-size: 10px;
+    }
+}
+
+.tabs {
+    color: white;
+    float: right;
+}
+
+.tab {
+    margin-left: 35px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.navContainer {
+    float: left;
+}
+
+.closeModal {
+    margin-top: 5px;
+    color: black;
+    background-color: lightgray;
+    z-index: 10;
+}

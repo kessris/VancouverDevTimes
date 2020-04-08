@@ -1,0 +1,23 @@
+.background {
+    text-align: center;
+    padding: 5px;
+    max-width: 100%;
+    background: black;
+    height: 180px;
+    position: relative;
+    font-family: Geneva, Helvetica, sans-serif;
+}
+
+.iconButton {
+    stroke: none;
+    fill: orange;
+}
+
+.iconSymbol {
+    stroke: none;
+    fill: white;
+}
+
+.rss:hover {
+    cursor:pointer;
+}

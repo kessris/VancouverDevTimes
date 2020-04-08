@@ -1,0 +1,8 @@
+{
+  "host": "email-smtp.us-west-2.amazonaws.com",
+  "port": 465,
+  "secure": true,
+  "IAMUserName": "ses-smtp-user.20200219-183633",
+  "SmtpUsername": "AKIA5M7HEXS6FGOCHQNF",
+  "SmtpPassword": "BIyC8Ax9ZgIamG/qjNtWdXSkLXM+ePqqy1UDlfkMEu0k"
+}

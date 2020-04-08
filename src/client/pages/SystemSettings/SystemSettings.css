@@ -1,0 +1,30 @@
+
+.root {
+ color: #000000;
+ font-family: Geneva, Helvetica, sans-serif;
+ margin: 20px 100px;
+ height: 65vh;
+}
+
+.header {
+ text-align: left;
+ font-size: 24px;
+}
+
+.body {
+ border: 1px solid #ebebeb;
+ background: #ebebeb;
+ height: 100%;
+ position: relative;
+}
+
+.margins {
+ padding: 20px;
+}
+
+.innerBody {
+ position: absolute;
+ top: 50%;
+ transform: translateY(-50%);
+ width: 100%;
+}

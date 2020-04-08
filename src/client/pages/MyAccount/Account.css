@@ -1,0 +1,43 @@
+.container {
+    color: #000000;
+    font-family: Geneva, Helvetica, sans-serif;
+    margin: 20px 100px;
+    height: 100%;
+}
+
+.header {
+    text-align: left;
+    font-size: 24px;
+}
+
+.subHeader {
+    text-align: left;
+    padding-bottom: 50px;
+}
+
+.body {
+    border: 1px solid #ebebeb;
+    background: #ebebeb;
+    height: 100%;
+}
+
+.title {
+    font-size: 16px;
+}
+
+.item {
+    font-size: 15px;
+}
+
+.blockContainer {
+    display: inline-block;
+    position: relative;
+    padding: 150px 100px;
+}
+
+.block {
+    width: 600px;
+    height: 100%;
+    background: white;
+    padding: 30px;
+}

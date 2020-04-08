@@ -1,0 +1,11 @@
+.root {
+    color: #000000;
+    font-family: Geneva, Helvetica, sans-serif;
+    margin: 20px 100px;
+    height: 120vh;
+}
+
+.header {
+    text-align: left;
+    font-size: 24px;
+}

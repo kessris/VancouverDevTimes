@@ -1,0 +1,50 @@
+.container {
+    color: #000000;
+    font-family: Geneva, Helvetica, sans-serif;
+    margin: 20px 100px;
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.body {
+    column-width: 700px;
+    max-width: 100%;
+    text-align: left;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    padding-top: 10px;
+}
+
+@media screen and (max-width: 1650px) {
+    .body {
+        column-width: 500px;
+    }
+}
+@media screen and (max-width: 1400px) {
+    .body {
+        column-width: auto;
+    }
+}
+
+.icons:hover {
+    cursor:pointer;
+}
+
+.header {
+    text-align: left;
+    font-size: 24px;
+}
+
+.body {
+    border: 1px solid #ebebeb;
+    background: #ebebeb;
+    font-size: 14px;
+}
+
+.result {
+    padding: 10px 10px;
+    &:hover {
+        color: #0000EE;
+    }
+}
+

@@ -1,0 +1,32 @@
+.container {
+    color: #000000;
+    font-family: Geneva, Helvetica, sans-serif;
+    margin: 20px 100px;
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.header {
+    text-align: left;
+    font-size: 24px;
+}
+
+.icons:hover {
+    cursor:pointer;
+}
+
+.subHeader {
+    text-align: left;
+    padding-bottom: 50px;
+}
+
+.body {
+    border: 1px solid #ebebeb;
+    background: #ebebeb;
+    column-width: 700px;
+    max-width: 100%;
+    text-align: left;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    padding-top: 10px;
+}

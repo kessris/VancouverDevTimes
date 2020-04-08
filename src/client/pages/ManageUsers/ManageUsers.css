@@ -1,0 +1,81 @@
+.container {
+    color: #000000;
+    font-family: Geneva, Helvetica, sans-serif;
+    margin: 20px 100px;
+    height: 100%;
+}
+
+.header {
+    text-align: left;
+    font-size: 24px;
+}
+
+.subHeader {
+    text-align: left;
+    padding-bottom: 50px;
+}
+
+.body {
+    border: 1px solid #ebebeb;
+    background: #ebebeb;
+    height: 100%;
+    position: relative;
+    font-size: 14px;
+}
+
+.innerBody {
+    display: inline-block;
+    width: 80%;
+    position: relative;
+    padding: 150px 100px;
+}
+@media screen and (max-width: 1685px) {
+    .innerBody {
+        display: inline-block;
+        width: 80%;
+        position: relative;
+        padding: 4%;
+    }
+}
+@media screen and (max-width: 1271px) {
+    .innerBody {
+        display: inline-block;
+        width: 90%;
+        position: relative;
+        padding: 4%;
+    }
+}
+@media screen and (max-width: 1150px) {
+    .innerBody {
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        padding: 2%;
+    }
+}
+
+table {
+    border-spacing: 10px;
+    width: 100%;
+    background: white;
+    text-align: center;
+
+    tr {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    th,
+
+    td {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+}
+
+.modalBody {
+    background: white;
+    display: 'flex';
+    align-items: 'center';
+    justify-content: 'center';
+}

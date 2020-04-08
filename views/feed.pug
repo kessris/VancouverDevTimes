@@ -1,0 +1,20 @@
+doctype xml
+rss(version='2.0', xmlns:atom='http://www.w3.org/2005/Atom')
+    channel
+        title VanDevTimes
+        link= url
+        atom:link(href=url + '/feed.xml', rel='self', type='application/rss+xml')
+        description VanDevTimes - Vancouver local blog aggregator presented by ByteMe
+        language en-US
+        id= url
+        if posts.length
+            lastBuildDate= date
+            pubDate= date
+        each post in posts
+            item
+                title= post.title
+                link= post.url
+                description Blog
+                pubDate= new Date(post.approvedTime).toUTCString()
+                guid(isPermaLink='false')= post.url
+                category= post.categoryName

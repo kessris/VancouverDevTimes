@@ -1,0 +1,18 @@
+.root {
+    color: #000000;
+    font-family: Geneva, Helvetica, sans-serif;
+    margin: 20px 100px;
+}
+
+.header {
+    text-align: left;
+    font-size: 24px;
+}
+
+.body {
+    border: 1px solid #ebebeb;
+    background: #ebebeb;
+    height: 100%;
+    position: relative;
+    padding: 70px 150px 60px;
+}

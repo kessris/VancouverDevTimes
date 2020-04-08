@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+const app = require('../index');
+const debug = require('debug')('backend:server');
+const http = require('http');
+
+const port = normalizePort(process.env.PORT || '4000');
+app.set('port', port);
+
+const server = http.createServer(app);
+
+function normalizePort(val) {
+    const port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+const expressServerUtils = require('express-server-utils')(server, port);
+expressServerUtils.listen();
+expressServerUtils.handleOnError();
+expressServerUtils.handleOnListening();
+
+const exitActions = [server.close];
+expressServerUtils.handleShutDown(exitActions);
+

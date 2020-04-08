@@ -1,0 +1,12 @@
+# IDE
+.vscode
+.idea
+
+# node
+node_modules
+
+# misc
+./src/server/config.js
+*.log
+yarn.lock
+*.xml

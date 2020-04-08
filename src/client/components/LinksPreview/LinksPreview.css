@@ -1,0 +1,13 @@
+.background {
+    max-width: 100%;
+    background: gainsboro;
+    height: 250px;
+    padding: 15px;
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.overall {
+    text-align: left;
+}

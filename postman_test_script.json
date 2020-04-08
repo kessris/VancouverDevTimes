@@ -1,0 +1,1482 @@
+{
+	"info": {
+		"_postman_id": "215939ab-c676-4823-8013-bad54aa358de",
+		"name": "API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Get all resources",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f6dd5ca8-11bb-4b3f-ae6f-b1dd5544e7b0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d5a2f488-0e76-4d98-ac37-4f203322b6c4",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/resources",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Submit post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2e0d37f8-26d5-4880-8813-7ca73dd7bcb0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"submissionTime\");",
+							"});",
+							"pm.test(\"Test approval threshold is above 0\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.approvalThreshold).to.be.above(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"https://www.google.com\",\n  \"title\": \"how to make google\",\n  \"category\": \"Events\",\n  \"permissionType\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Update resource",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0995c1f-c9d8-4fd0-ad5a-90edd9b8c307",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"url\");",
+							"    pm.expect(pm.response.text()).to.include(\"categoryName\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": " Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"https://www.google.com\",\n  \"categoryName\": \"Uncategorized\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/resource",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get pending content with reviewers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7c941693-d578-4831-946f-f58d719864bc",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response non empty\", function () {",
+							"    pm.expect(pm.response.json().allLinks.length).to.be.above(0);",
+							"});",
+							"",
+							"pm.test(\"Response contains contain correct fields\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"allLinks\");",
+							"    pm.expect(pm.response.text()).to.include(\"resourceType\");",
+							"    pm.expect(pm.response.text()).to.include(\"categoryName\");",
+							"    pm.expect(pm.response.text()).to.include(\"url\");",
+							"    pm.expect(pm.response.text()).to.include(\"title\");",
+							"    pm.expect(pm.response.text()).to.include(\"approvalCount\");",
+							"    pm.expect(pm.response.text()).to.include(\"approvalThreshold\");",
+							"    pm.expect(pm.response.text()).to.include(\"approvers\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Test approval threshold is above 0\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.allLinks[0].approvalThreshold).to.be.above(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/resources/pending",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources",
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Get all approved resources",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f735f613-9626-44e9-a671-a1909e6d0311",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/resources/approved",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources",
+						"approved"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6.Get max num of articles approved by categories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a5b8b96a-1399-42b4-b9b4-0fffd4d95cb1",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response results have correct length\", function () {",
+							"    pm.expect(pm.response.json().allApprovedByCategory[0].articles.length<= 10).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/resources/approvedByCategory/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources",
+						"approvedByCategory",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Search resources with matching title and category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "99d42853-25b0-4f8e-b065-c41fe640d27b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/resources/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. Get content from category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e5987f5e-cee4-49d2-8cb2-4f2741c05ba0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test results in correct category\", function () {",
+							"     pm.response.json().data.forEach(function(item){",
+							"        pm.expect(item.categoryName == \"Events\").to.be.true;",
+							"     });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/resource/Events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resource",
+						"Events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9. Submit rss feed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f6b5ca86-4939-4aa1-8ba7-64254659dd9c",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"submissionTime\");",
+							"});",
+							"pm.test(\"Test approval threshold is above 0\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.approvalThreshold).to.be.above(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"https://medium.com/feed/the-launchism\",\n  \"permissionType\": \"sysManager\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/rss",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rss"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10. Approve post with url",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "274e5e78-afc5-4ec2-91be-54ddaed37cad",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user\": \"vandevtimesadmuser@gmail.com\",\n  \"url\": \"https://www.google.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/approvals",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"approvals"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11. Approve rss feed",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user\": \"vandevtimesadmuser@gmail.com\",\n  \"url\": \"https://medium.com/feed/the-launchism\",\n  \"permissionType\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/approvals/rss",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"approvals",
+						"rss"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12. Recategorize resource",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4a4039a-a47f-4bdc-bce2-15bd5660038d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"https://www.google.com\",\n  \"categoryName\": \"Products\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/resource",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13. Delete Resource",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebb70691-4292-4be4-942d-40f9f79744ea",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"url\": \"https://www.google.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/resources",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14. Delete RSS feed",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"url\": \"https://medium.com/feed/the-launchism\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/resources",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "15. Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9b8ccc75-ae65-4c34-ae5f-a4a652c1b29d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "16.Update System Settings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d9ee3d79-2c20-4309-871d-b9ebae39e1fc",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"permission\": [{\"newThreshold\": 27,\"permissionType\": \"regular\"}],\n\t\"scheduler\": [{\"taskId\": \"subscription-email\", \"newFreq\": 3, \"maxNum\": 17},{\"taskId\": \"approval-reminder\", \"newFreq\": 7, \"maxNum\": 17}, {\"taskId\": \"RSS-retrieval\", \"newFreq\": 10, \"maxNum\": 17}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/updateSettings",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"updateSettings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "16.0 Check Threshold Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f105c67c-a9ca-4670-80e4-f5e9f077f7d2",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check Update User Permissin Threshold\", function(){",
+							"    var data = pm.response.json().permission;",
+							"    data.forEach(d => {",
+							"        if(d.permissionType === \"regular\"){",
+							"            pm.expect(d.approvalThreshold).to.equal(27);",
+							"        }",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/permission",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"permission"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "16.1 Check Scheduler Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "80ba5429-8434-4736-a918-08788ea53b39",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check Update Scheduler\", function(){",
+							"    var data = pm.response.json().scheduler;",
+							"    data.forEach(d => {",
+							"        if(d.taskId === \"subscription-email\"){",
+							"             pm.expect(data).to.equal(\"3\");",
+							"        }else if(d.taskId === \"approval-reminder\"){",
+							"             pm.expect(data).to.equal(\"7\");",
+							"        }else if(d.taskId === \"RSS-retrieval\"){",
+							"             pm.expect(data).to.equal(\"10\");",
+							"        }else{",
+							"            return false;",
+							"        }",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:4000/api/scheduler",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"scheduler"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "17. Update User Permisson",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3c77835a-436b-4611-b748-2b478087b506",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c10fce2f-c72e-4660-9b14-04977481108b",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"newRole\": \"admin\",\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/user/permissions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user",
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "17.0 Check Permission Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "08af34e7-0c86-49a4-bff9-b000d5213eb8",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check Update User Permissin\", function(){",
+							"    var data = pm.response.json();",
+							"    pm.expect(data.TYPE).to.equal(\"admin\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "18. Assign Company to User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c025b7c-6ba8-4531-9d2c-d41b2fb494fa",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"newComp\": \"Hootsuite\",\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/user/company/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user",
+						"company",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "18.0 Check Company Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eba1393f-cb80-4b57-8508-deeddd6fc4b4",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check Update User Company\", function(){",
+							"    var data = pm.response.json();",
+							"    pm.expect(data.companyName).to.equal(\"Hootsuite\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "19. Subscribe Weekly Email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "92c81a3c-c9f7-4d9d-a024-c5dddd76c078",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer{{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"isSubscribed\": true,\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/user/subscription",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user",
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "19.0 Check Subscribtion Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "59f8935c-423a-4304-9b6d-c895e27ea90c",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check Update Subscribtion\", function(){",
+							"    var data = pm.response.json();",
+							"    pm.expect(data.SUBSCRIBED).to.equal(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "20. Add New Company",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8de0a763-513d-49a3-b20b-840e32451d88",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODYyMTYwNjJ9.3A-rPr4leFmhOM4srf72IMrSa2rqhngS6IacadrJN2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"companyName\": \"aCompany\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/company",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"company"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "20.0 Check Company Added",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "91f2f355-ed7f-4d5b-a4a9-2cea18acc9e8",
+						"exec": [
+							"pm.test(\"Response time is less than 4000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(4000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Check New Company Added\", function(){",
+							"    var data = pm.response.json().allCompanies;",
+							"    pm.expect(data).to.include(\"aCompany\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer{{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"vandevtimesreguser@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/companies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"companies"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -1,0 +1,1151 @@
+swagger: "2.0"
+info:
+  description: "This is the swagger doc for vanDevTimes"
+  version: "1.0.0"
+  title: "Swagger vanDevTimes"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "vantimes.info@gmail.com"
+basePath: "/api"
+paths:
+  /resources:
+    get:
+      tags:
+        - "Content"
+      summary: "get all resources (Resources and feeds)"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ArrayOfPostFull' 
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+
+    delete:
+      tags:
+        - "Content"
+      summary: "delete content resource with url"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "delete content resource with url"
+          required: true
+          schema:
+            example: {
+             "url": "https://stackoverflow.com/questions/44610613/node-js-mysql-deleting-multiple-rows-with-an-array-of-array"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+             "url": "https://stackoverflow.com/questions/44610613/node-js-mysql-deleting-multiple-rows-with-an-array-of-array"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resources/pending:
+    get:
+      tags:
+        - "Content"
+      summary: "return pending content along with existing reviewers(if any exists)"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              allLinks: [
+              { resourceType: "Blog Article",
+                categoryName: "Others",
+                url: "www.google.com/blog/123",
+                title: "Example",
+                approvalCount: 2,
+                approvalThreshold: 4,
+                approver: "John.doe@gmail.com"
+              }
+              ]
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resources/count/:user:
+    get:
+      tags:
+        - "Content"
+      summary: "return count of articles pending reviews for current user(query param)"
+      parameters:
+        - name: "user"
+          in: "path"
+          type: integer
+          required: true
+          description: "maximum number of approved articles to be retrieved from each category"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: 3
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resources/approved/user:
+    get:
+      tags:
+        - "Content"
+      summary: "return resources that have been approved by users"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              allLinks: [
+              { resourceType: "Blog Article",
+                categoryName: "Others",
+                url: "www.google.com/blog/123",
+                title: "Example",
+                approvalCount: 2,
+                approvalThreshold: 4,
+                approver: "John.doe@gmail.com"
+              }
+              ]
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resources/approved:
+    get:
+      tags:
+        - "Content"
+      summary: "get all approved resources (Resources and feeds)"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ArrayOfPostFull'
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resources/approvedByCategory/:maxNum:
+    get:
+      tags:
+        - "Content"
+      summary: "return maxNum of approved content resources from each catagory"
+      parameters:
+        - name: "maxNum"
+          in: "path"
+          type: integer
+          required: true
+          description: "maximum number of approved articles to be retrieved from each category"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "allApprovedByCategory": [
+              {
+                "category": "Database",
+                "articles": [
+                {
+                  "link": "https://www.wegalvanize.com/featured/cyber-risk-assessments/1",
+                  "title": "How to conduct a cyber-risk assessment",
+                  "category": "Database"
+                }
+                ]
+              },
+              {
+                "category": "Products",
+                "articles": [
+                {
+                  "link": "https://www.wegalvanize.com/featured/cyber-risk-assessments/4",
+                  "title": "How to conduct a cyber-risk assessment",
+                  "category": "Products"
+                }
+                ]
+              },
+              {
+                "category": "Social",
+                "articles": [
+                {
+                  "link": "https://www.wegalvanize.com/featured/cyber-risk-assessments/6",
+                  "title": "How to conduct a cyber-risk assessment",
+                  "category": "Social"
+                }
+                ]
+              }
+              ]
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resources/search:
+    get:
+      tags:
+        - "Content"
+      summary: "get all resources with matching title and category"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "title search string, category selected from drop down menu in search area (valid category name or 'All')"
+          required: true
+          schema:
+            example: {
+              "titleString": "assess",
+              "category": "Database"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ArrayOfPostFull"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resource/{category}:
+    get:
+      tags:
+        - "Content"
+      summary: "get all resources by from a specific category"
+      parameters:
+        -  name: "category"
+           in: "path"
+           type: string
+           required: true
+           description: "Category of content resource to return"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ArrayOfPostFull' 
+            
+  /resource/approved/{category}:
+    get:
+      tags:
+        - "Content"
+      summary: "get all approved resources by from a specific category"
+      parameters:
+        -  name: "category"
+           in: "path"
+           type: string
+           required: true
+           description: "Category of content resource to return"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ArrayOfPostFull'
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /post/{title}:
+    get:
+      tags:
+        - "Content"
+      summary: "get the resource by a specific title"
+      parameters:
+        -  name: "title"
+           in: "path"
+           type: string
+           required: true
+           description: "Title of content resource to return"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              'url': "https://www.google.com"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /post:
+    post:
+      tags:
+        - "Content"
+      summary: "submit post"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "url, title, category, and user permission type of a post submission"
+          required: true
+          schema:
+            $ref: '#/definitions/PostSubmission'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/PostFull'
+        400:
+          description: "invalid or dead url"
+          schema:
+            example: {
+              "errorCode": 400,
+              "message": "URL entered is invalid/not live."
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /rss:
+    get:
+      tags:
+        - "Content"
+      summary: "get latest articles from a RSS feed"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "link of the RSS feed"
+          required: true
+          schema:
+            $ref: '#/definitions/RSSFeedSubmission'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ArrayOfResource'
+        400:
+          description: "invalid or dead url"
+          schema:
+            example: {
+              "errorCode": 400,
+              "message": "Feed to poll is not live anymore"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+    post:
+      tags:
+        - "Content"
+      summary: "submit RSS feed"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "url and user permission type of RSS feed"
+          required: true
+          schema:
+            $ref: '#/definitions/RSSFeedSubmission'
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/RSSFeedFull'
+        400:
+          description: "invalid or dead url"
+          schema:
+            example: {
+              "errorCode": 400,
+              "message": "URL entered is invalid/not live."
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /approvals:
+    post:
+      tags:
+        - "Content"
+      summary: "approve content resource with url"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "approver email and url of content to be approved"
+          required: true
+          schema:
+            example: {
+              user: "john.doe@gmail.com",
+              url: "www.google.com/blog"
+            }
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /approvals/rss:
+    post:
+      tags:
+        - "Content"
+      summary: "approve rss feed with url (poll if approvalCount >= approvalThreshold"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "approver email, url of content to be approved, and original submitter permissionType"
+          required: true
+          schema:
+            example: {
+              "user": "vandevtimesadmuser@gmail.com",
+              "url": "https://medium.com/feed/the-launchism",
+              "permissionType": "admin"
+            }
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /resource:
+    put:
+      tags:
+        - "Content"
+      summary: "recategorize a resource"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "url and new category name"
+          required: true
+          schema:
+            example: {
+              "url": "https://blog.hootsuite.com/facebook-messengers/",
+              "categoryName": "Products"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "url": "https://blog.hootsuite.com/facebook-messengers/",
+              "categoryName": "Products"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /feed:
+    get:
+      tags:
+        - "Content"
+      summary: "site RSS feed"
+      description: ""
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation: RSS xml rendered at endpoint path"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /categories:
+    get:
+      tags:
+        - "Category"
+      summary: "Get all content categories"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Category"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+    post:
+      tags:
+        - "Category"
+      summary: "add category with name"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "category name"
+          required: true
+          schema:
+            $ref: "#/definitions/Category"
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+    delete:
+      tags:
+        - "Category"
+      summary: "remove categroy with name after re-categorizing all content in name to Uncategorized"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "category name"
+          required: true
+          schema:
+            example: {"categoryName": "testCategory"}
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /scheduler:
+    get:
+      tags:
+        - "Scheduler"
+      summary: "Get scheduler settings of all tasks"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "scheduler": [
+              {
+                "ID": "approval-reminder",
+                "FREQUENCY": 7,
+                "START_TIME": "2019-01-01T08:00:00.000Z",
+                "MAX_NUM": 17
+              },
+              {
+                "ID": "RSS-retrieval",
+                "FREQUENCY": 10,
+                "START_TIME": "2019-01-01T08:00:00.000Z",
+                "MAX_NUM": 17
+              },
+              {
+                "ID": "subscription-email",
+                "FREQUENCY": 3,
+                "START_TIME": "2019-01-01T08:00:00.000Z",
+                "MAX_NUM": 17
+              }
+              ]
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /user:
+    get:
+      tags:
+        - "User"
+      summary: "get user account info"
+      consumes:
+        - "application/json"
+      parameters:
+        -  in: "body"
+           name: "body"
+           description: "a user email"
+           schema:
+             example: {
+               "email": "regularUser@email.com"
+             }
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /users:
+    get:
+      tags:
+        - "User"
+      summary: "get all users"
+
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ArrayOfUsers"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /user/permissions:
+    put:
+      tags:
+        - "User"
+        - "Permission"
+      summary: "update a user's permission level"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "a user email and new role"
+          schema:
+            example: {
+              "newRole": 2,
+              "email": "regularUser@email.com"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "newRole": 2,
+              "email": "regularUser@email.com"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /company:
+    put:
+      tags:
+        - "Company"
+      summary: "set a user's company"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "a user email and new company"
+          schema:
+            example: {
+              "newComp": "ABC",
+              "email": "regularUser@email.com"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "newComp": "ABC",
+              "email": "regularUser@email.com"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+    post:
+      tags:
+        - "Company"
+      summary: "add a company"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "a new company"
+          schema:
+            example: {
+              "companyName": "aCompany"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "companyName": "aCompany"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+
+    delete:
+      tags:
+        - "Company"
+      summary: "delete a company"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "an existing company"
+          schema:
+            example: {
+              "companyName": "Company2Delete"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "companyName": "Company2Delete"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+
+  /user/subscription:
+    put:
+      tags:
+        - "User"
+      summary: "change a user's subscription status"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "a user email and new status"
+          schema:
+            example: {
+              "isSubscribed": true,
+              "email": "regularUser@email.com"
+            }
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "isSubscribed": true,
+              "email": "regularUser@email.com"
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+
+  /companies:
+    get:
+      tags:
+        - "Company"
+      summary: "get all companies"
+
+
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "allCompanies": [
+                "Galvanize",
+                "Hootsuite",
+                "Later"
+              ]
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+
+  /updateSettings:
+    put:
+      tags:
+        - "Settings"
+      summary: "Update system settings"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "change system settings for both scheduler and permission"
+        schema:
+          $ref: "#/definitions/Setting"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+  /permission:
+    get:
+      tags:
+        - "Permission"
+      summary: "Get permission settings of all user types"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            example: {
+              "permission": [
+              {
+                "TYPE": "admin",
+                "THRESHOLD": 2
+              },
+              {
+                "TYPE": "regular",
+                "THRESHOLD": 27
+              },
+              {
+                "TYPE": "sysManager",
+                "THRESHOLD": 1
+              }
+              ]
+            }
+        401:
+          description: "unauthorized operation"
+        500:
+          description: "database error"
+          schema:
+            example: "{Error: ER_BAD_FIELD_ERROR: some detailed information}"
+definitions:
+  Category:
+    type: "object"
+    properties:
+      categoryName:
+        type: "string"
+  Resource:
+    type: "object"
+    required:
+      - "url"
+      - "title"
+      - "category"
+    properties:
+      url:
+        example: "www.google.com"
+      title:
+        example: "how to make google"
+      category:
+        example: "front-end"
+  RSSFeed:
+    type: "object"
+    required:
+      - "url"
+    properties:
+      url:
+        example: "https://medium.com/feed/the-launchism"
+  PostSubmission:
+    type: "object"
+    required:
+      - "url"
+      - "title"
+      - "category"
+      - "permissionType"
+    properties:
+      url:
+        example: "www.google.com"
+      title:
+        example: "how to make google"
+      category:
+        example: "front-end"
+      permissionType:
+        example: "admin"
+  RSSFeedSubmission:
+    type: "object"
+    required:
+      - "url"
+      - "permissionType"
+    properties:
+      url:
+        example: "https://medium.com/feed/the-launchism"
+      permissionType:
+        example: "sysManager"
+  PostFull:
+    type: "object"
+    required:
+      - "resourceType"
+      - "approvalThreshold"
+      - "url"
+      - "submissionTime"
+      - "approvedTime"
+      - "approvalCount"
+      - "title"
+      - "categoryName"
+    properties:
+      resourceType:
+        example: "Blog Post"
+      approvalThreshold:
+        example: 3
+      url:
+        example: "https://blog.hootsuite.com/facebook-messenger8/"
+      submissionTime:
+        example: "2020-03-24T21:05:36.081Z"
+      approvedTime:
+        example: NULL
+      approvalCount:
+        example: 0
+      title:
+        example: "Facebook Messenger: The Complete Guide for Business."
+      categoryName:
+        example: "Products"
+  RSSFeedFull:
+    type: "object"
+    required:
+      - "resourceType"
+      - "approvalThreshold"
+      - "url"
+      - "submissionTime"
+      - "approvedTime"
+      - "approvalCount"
+      - "title"
+      - "categoryName"
+    properties:
+      resourceType:
+        example: "RSS Feed"
+      approvalThreshold:
+        example: 3
+      url:
+        example: "https://blog.hootsuite.com/feed/"
+      submissionTime:
+        example: "2020-03-24T21:05:36.081Z"
+      approvedTime:
+        example: NULL
+      approvalCount:
+        example: 0
+      title:
+        example: NULL
+      categoryName:
+        example: NULL
+  ArrayOfResource:
+    type: "object"
+    required:
+      - "resources"
+    properties:
+      resources:
+        example: [
+        {
+          "url": "https://www.wegalvanize.com/featured/cyber-risk-assessments/1",
+          "title": "How to conduct a cyber-risk assessment",
+          "categoryName": "Database"
+        },
+        {
+          "url": "https://www.wegalvanize.com/featured/cyber-risk-assessments/2",
+          "title": "How to conduct a cyber-risk assessment",
+          "categoryName": "Database"
+        }
+        ]
+  ArrayOfPostFull:
+    type: "object"
+    required:
+      - "resources"
+    properties:
+      resources:
+        example: [
+        {
+          "resourceType": "Blog Post",
+          "approvalThreshold": 3,
+          "url": "https://www.wegalvanize.com/featured/cyber-risk-assessments/1",
+          "submissionTime": "2020-02-05T08:00:00.000Z",
+          "approvedTime": "2020-02-06T08:00:00.000Z",
+          "approvalCount": 4,
+          "title": "How to conduct a cyber-risk assessment",
+          "categoryName": "Database"
+        },
+        {
+          "resourceType": "Blog Post",
+          "approvalThreshold": 3,
+          "url": "https://www.wegalvanize.com/featured/cyber-risk-assessments/2",
+          "submissionTime": "2020-02-05T08:00:00.000Z",
+          "approvedTime": "2020-02-06T08:00:00.000Z",
+          "approvalCount": 5,
+          "title": "How to conduct a cyber-risk assessment",
+          "categoryName": "Database"
+        }
+        ]
+  User:
+    type: "object"
+    required:
+      - "USER_NAME"
+      - "EMAIL"
+      - "TYPE"
+      - "companyName"
+      - "SUBSCRIBED"
+    properties:
+      USER_NAME:
+        example: "John Doe"
+      EMAIL:
+        example: "regularUser@gmail.com"
+      TYPE:
+        example: "regular"
+      companyName:
+        example: "Galvanize"
+      SUBSCRIBED:
+        example: 1
+  ArrayOfUsers:
+    type: "object"
+    required:
+      - "users"
+    properties:
+      users:
+        example: [
+        {
+          "USER_NAME": "Jackson Doe",
+          "EMAIL": "adminUser@email.com",
+          "TYPE": "admin",
+          "companyName": null,
+          "SUBSCRIBED": 1
+        },
+        {
+          "USER_NAME": "Hee Su Kim",
+          "EMAIL": "kessris@gmail.com",
+          "TYPE": "sysManager",
+          "companyName": null,
+          "SUBSCRIBED": 1
+        }]
+  Scheduler:
+    type: "object"
+    properties:
+      taskId:
+        example: "RSS retrieval"
+      newfreq:
+        example: 7
+      maxNum:
+        example: 10
+  Permission:
+    type: "object"
+    required:
+      - "permissionType"
+      - "approvalThreshold"
+    properties:
+      permissionType:
+        example: "regular"
+      approvalThreshold:
+        example: 4
+  Setting:
+    type: "object"
+    required:
+      - "permission"
+      - "scheduler"
+    properties:
+      permission:
+        example: [{"newThreshold": 27, "permissionType": "regular"},{"newThreshold": 2, "permissionType": "admin"}]
+      scheduler:
+        example: [{"taskId": "approval-reminder", "newFreq": 3, "maxNum": 17}, {"taskId": "subscription-email", "newFreq": 1, "maxNum": 17}]
+  AppUser:
+    type: "object"
+    required:
+      - "permissionType"
+      - "approvalThreshold"
+    properties:
+      permissionType:
+        example: "regular"
+      approvalThreshold:
+        example: 4
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

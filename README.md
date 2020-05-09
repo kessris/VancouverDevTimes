@@ -4,6 +4,10 @@
 
 Note: for deployment setup refer to [INSTALL.md](https://gitlab.com/cpsc319-2019w2/galvanize/byteme/CS319/-/blob/master/INSTALL.md)
 
+### USER GUIDE:
+
+https://www.youtube.com/watch?v=tLHj3VIy0_s&feature=youtu.be
+
 # Checkout Git branch
 
 ```bash

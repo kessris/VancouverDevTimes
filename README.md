@@ -1,3 +1,15 @@
+# Brief Introduction
+
+This was a project developed from a project course at UBC (CPSC 319), sponsored by Vancouver tech companies. 
+
+We (Hee Su [me], Floris, Lewis, Xin Yue, Sheila) built a new website **from scratch with our choice of technology.**
+We used React for front-end, JavaScript + Node.js for back-end and MySQL on Docker for our database.
+We tested the concurrency and performance using JMeter and by populating the database with 5000+ articles.
+
+This is a blog aggregator website for Vancouver tech companies.
+
+The dev version was previously deployed on AWS (both the app + DB) on http://vandevtimes-dev.us-west-2.elasticbeanstalk.com/, but we took it down because of the service quota limit. If you want to run the app, follow the README.md and INSTALL.md file on the repository. You should be able to run it with MySQL on a Docker image.
+
 # Instructions on how to set up the Dev environment for **"Vancouver DEV Times"**
 
 ![](src/client/assets/screenshot.jpg)
